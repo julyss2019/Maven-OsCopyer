@@ -24,7 +24,6 @@ public class CopyMojo extends AbstractMojo {
         final Log log = getLog();
 
         log.info("当前系统: " + OS_NAME);
-        log.info("happy everyday:)");
 
         copyers.forEach(copyer -> {
             java.io.File fromFile = new java.io.File(copyer.getFrom());
