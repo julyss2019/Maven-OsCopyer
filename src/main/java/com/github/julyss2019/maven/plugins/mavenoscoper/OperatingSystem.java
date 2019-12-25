@@ -8,7 +8,7 @@ public class OperatingSystem {
     @Parameter
     private String name;
     @Parameter
-    private File to;
+    private File dest;
     @Parameter(defaultValue = "false")
     private boolean overwrite;
 
@@ -20,7 +20,7 @@ public class OperatingSystem {
         return name;
     }
 
-    public File getTo() {
-        return to;
+    public File getDest() {
+        return dest;
     }
 }

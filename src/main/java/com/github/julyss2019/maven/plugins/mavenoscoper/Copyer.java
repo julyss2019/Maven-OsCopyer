@@ -8,12 +8,12 @@ import java.util.List;
 
 public class Copyer {
     @Parameter
-    private File from;
+    private File source;
     @Parameter
     private List<OperatingSystem> operatingSystems;
 
-    public File getFrom() {
-        return from;
+    public File getSource() {
+        return source;
     }
 
     public List<OperatingSystem> getOperatingSystems() {
