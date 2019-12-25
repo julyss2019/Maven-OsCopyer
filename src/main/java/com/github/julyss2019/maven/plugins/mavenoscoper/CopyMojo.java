@@ -14,10 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Mojo(name = "copy",defaultPhase = LifecyclePhase.PACKAGE)
+@Mojo(name = "copy", defaultPhase = LifecyclePhase.PACKAGE)
 public class CopyMojo extends AbstractMojo {
     private static final String OS_NAME = System.getProperty("os.name");
-
     @Parameter
     private List<Copyer> copyers;
 
