@@ -2,16 +2,17 @@ package com.github.julyss2019.maven.plugins.mavenoscoper;
 
 import org.apache.maven.plugins.annotations.Parameter;
 
+import java.io.File;
 import java.util.List;
 
 
 public class Copyer {
     @Parameter
-    private String from;
+    private File from;
     @Parameter
     private List<OperatingSystem> operatingSystems;
 
-    public String getFrom() {
+    public File getFrom() {
         return from;
     }
 

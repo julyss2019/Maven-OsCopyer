@@ -2,11 +2,13 @@ package com.github.julyss2019.maven.plugins.mavenoscoper;
 
 import org.apache.maven.plugins.annotations.Parameter;
 
+import java.io.File;
+
 public class OperatingSystem {
     @Parameter
-    private String os;
+    private String name;
     @Parameter
-    private String to;
+    private File to;
     @Parameter(defaultValue = "false")
     private boolean overwrite;
 
@@ -14,11 +16,11 @@ public class OperatingSystem {
         return overwrite;
     }
 
-    public String getOs() {
-        return os;
+    public String getName() {
+        return name;
     }
 
-    public String getTo() {
+    public File getTo() {
         return to;
     }
 }

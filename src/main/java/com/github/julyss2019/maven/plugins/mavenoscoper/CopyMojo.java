@@ -6,6 +6,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -26,7 +27,7 @@ public class CopyMojo extends AbstractMojo {
         log.info("当前系统: " + OS_NAME);
 
         copyers.forEach(copyer -> {
-            java.io.File fromFile = new java.io.File(copyer.getFrom());
+            java.io.File fromFile = copyer.getFrom();
 
             if (!fromFile.exists()) {
                 getLog().error(new RuntimeException("文件不存在: " + fromFile.getAbsolutePath()));
@@ -34,32 +35,26 @@ public class CopyMojo extends AbstractMojo {
 
             copyer.getOperatingSystems()
                     .stream()
-                    .filter(osConfig -> osConfig.getOs().equalsIgnoreCase(OS_NAME))
+                    .filter(osConfig -> osConfig.getName().equalsIgnoreCase(OS_NAME))
                     .collect(Collectors.toList()).forEach(os -> {
-                String toPath = os.getTo();
+                        File toFile = os.getTo();
 
-                if (toPath == null) {
-                    getLog().error(new RuntimeException("输出文件不存在: " + os.getOs()));
-                }
+                        if (toFile.isDirectory()) {
+                            getLog().error(new RuntimeException("路径必须是文件: " + toFile.getAbsolutePath()));
+                        }
 
-                java.io.File toFile = new java.io.File(os.getTo());
+                        if (toFile.exists() && !os.isOverwrite()) {
+                            getLog().warn("文件未被复制: " + toFile.getAbsolutePath() + ", 因为文件已存在, 且未设置 overwrite 属性");
+                            return;
+                        }
 
-                if (toFile.isDirectory()) {
-                    getLog().error(new RuntimeException("路径必须是文件: " + toFile.getAbsolutePath()));
-                }
+                        try {
+                            Files.copy(fromFile.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e) {
+                            getLog().error(e);
+                        }
 
-                if (toFile.exists() && !os.isOverwrite()) {
-                    getLog().warn("文件未被复制: " + toFile.getAbsolutePath() + ", 因为文件已存在, 且未设置 overwrite 属性");
-                    return;
-                }
-
-                try {
-                    Files.copy(fromFile.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    getLog().error(e);
-                }
-
-                getLog().info("完成复制: " + fromFile.getAbsolutePath() + " -> " + toFile.getAbsolutePath());
+                        getLog().info("完成复制: " + fromFile.getAbsolutePath() + " -> " + toFile.getAbsolutePath());
             });
         });
     }
